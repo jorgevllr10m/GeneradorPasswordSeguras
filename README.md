@@ -1,0 +1,2 @@
+# GeneradorContrase-asSeguras
+Este proyecto va dirigido a tener un generador de contraseñas seguras desplegado en la web.
