@@ -45,6 +45,35 @@ def pedir_si_no(mensaje):
             return respuesta == "S"
         print("\nEntrada no válida. Escribe 'S' o 'N'.")
 
+def medidorSeguridad(contraseña):
+    puntuacion=0
+    if(len(contraseña)<6):
+        puntuacion+=0
+    elif(len(contraseña)>=6 & len(contraseña<12)):
+        puntuacion+=1
+    else:
+        puntuacion+=2
+    
+    if(any(c.isupper() for c in contraseña)):
+        puntuacion+=1
+    if(any(c.islower() for c in contraseña)):
+        puntuacion+=1
+    if(any(c.isdigit() for c in contraseña)):
+        puntuacion+=1
+    if(any(c in string.punctuation for c in contraseña)):
+        puntuacion+=2
+
+    caracteres_unicos = set(contraseña)
+    if (len(caracteres_unicos)/len(contraseña)<0.33):
+        puntuacion-=1
+    elif(len(caracteres_unicos)/len(contraseña)<0.66):
+        puntuacion+=1
+    else:
+        puntuacion+=2
+
+    
+            
+
 
 def main():
     longitud = int(input("Ingrese la longitud de la contraseña deseada: "))
