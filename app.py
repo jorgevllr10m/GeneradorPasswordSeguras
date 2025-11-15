@@ -29,27 +29,11 @@ def generaContraseña(l, requerirDigito, requerirMayuscula, requerirMinuscula, r
 
     return "".join(contraseña)
 
-def pedir_si_no(mensaje):
-    """
-    Solicita al usuario una respuesta 'S' o 'N' y valida la entrada.
-
-    Args:
-        mensaje (str): Texto que se mostrará al pedir la respuesta.
-
-    Returns:
-        bool: True si el usuario introduce 'S', False si introduce 'N'.
-    """
-    while True:
-        respuesta = input(mensaje).strip().upper()
-        if respuesta in ("S", "N"):
-            return respuesta == "S"
-        print("\nEntrada no válida. Escribe 'S' o 'N'.")
-
 def medidorSeguridad(contraseña):
     puntuacion=0
     if(len(contraseña)<6):
         puntuacion+=0
-    elif(len(contraseña)>=6 & len(contraseña)<12):
+    elif(len(contraseña)>=6 and len(contraseña)<12):
         puntuacion+=1
     else:
         puntuacion+=2
@@ -77,23 +61,28 @@ def medidorSeguridad(contraseña):
         return "segura"
     else:
         return "muy segura"
-            
-
-
-def main():
-    longitud = int(input("Ingrese la longitud de la contraseña deseada: "))
-
-    requerirDigitos = pedir_si_no("¿Requerir al menos un dígito? (S/N) ")
-
-    requerirMayus = pedir_si_no("¿Requerir al menos una mayúscula? (S/N) ")
-
-    requerirMinus = pedir_si_no("¿Requerir al menos una minúscula? (S/N) ")
-
-    requerirSimbolo = pedir_si_no("¿Requerir al menos un símbolo? (S/N) ")
     
-    contraseña = generaContraseña(longitud, requerirDigitos, requerirMayus, requerirMinus, requerirSimbolo)
-    print("\nLa contraseña generada es: " + contraseña)
-    print("\nEl nivel de seguridad de la contraseña es: " + medidorSeguridad(contraseña))
+
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    contraseña = None
+    fuerza = None
+
+    if request.method == "POST":
+        longitud = int(request.form["longitud"])
+        requerirDigito = "digito" in request.form
+        requerirMayuscula = "mayus" in request.form
+        requerirMinuscula = "minus" in request.form
+        requerirSimbolo = "simbolo" in request.form
+
+        contraseña = generaContraseña(longitud, requerirDigito, requerirMayuscula, requerirMinuscula, requerirSimbolo)
+        fuerza = medidorSeguridad(contraseña)
+
+    return render_template("index.html", contraseña=contraseña, fuerza=fuerza)
 
 if __name__ == "__main__":
-    main()
+    app.run()

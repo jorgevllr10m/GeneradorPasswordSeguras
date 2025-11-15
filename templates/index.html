@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Generador de Contraseñas</title>
+</head>
+
+<body>
+    <h1>Generador de Contraseñas</h1>
+
+    <form method="POST">
+
+        Longitud:
+        <input type="number" name="longitud" min="4" max="32" value="10" required>
+        <br><br>
+
+        <label><input type="checkbox" name="digito" checked> Incluir mínimo un dígito</label><br>
+        <label><input type="checkbox" name="mayus" checked> Incluir mínimo una mayúscula</label><br>
+        <label><input type="checkbox" name="minus" checked> Incluir mínimo una minúscula</label><br>
+        <label><input type="checkbox" name="simbolo" checked> Incluir mínimo un símbolo</label><br><br>
+
+        <button type="submit">Generar</button>
+    </form>
+
+    {% if contraseña %}
+        <div style="
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 10px;
+        background-color: #fafafa;
+        border: 1px solid #e0e0e0;
+        max-width: 450px;">
+
+        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+            <strong>Contraseña generada:</strong>
+            <span>{{ contraseña }}</span>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <strong>Nivel de seguridad:</strong>
+            <span>{{ fuerza }}</span>
+        </div>
+
+    </div>
+    {% endif %}
+
+</body>
+
+</html>
