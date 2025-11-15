@@ -49,7 +49,7 @@ def medidorSeguridad(contraseña):
     puntuacion=0
     if(len(contraseña)<6):
         puntuacion+=0
-    elif(len(contraseña)>=6 & len(contraseña<12)):
+    elif(len(contraseña)>=6 & len(contraseña)<12):
         puntuacion+=1
     else:
         puntuacion+=2
@@ -71,7 +71,12 @@ def medidorSeguridad(contraseña):
     else:
         puntuacion+=2
 
-    
+    if(puntuacion<5):
+        return "débil"
+    elif(puntuacion<8):
+        return "segura"
+    else:
+        return "muy segura"
             
 
 
@@ -87,7 +92,8 @@ def main():
     requerirSimbolo = pedir_si_no("¿Requerir al menos un símbolo? (S/N) ")
     
     contraseña = generaContraseña(longitud, requerirDigitos, requerirMayus, requerirMinus, requerirSimbolo)
-    print(contraseña)
+    print("\nLa contraseña generada es: " + contraseña)
+    print("\nEl nivel de seguridad de la contraseña es: " + medidorSeguridad(contraseña))
 
 if __name__ == "__main__":
     main()
