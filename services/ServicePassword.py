@@ -28,6 +28,7 @@ def generaContraseña(l, requerirDigito, requerirMayuscula, requerirMinuscula, r
     for _ in range(l-len(contraseña)):
         contraseña.append(random.choice(caracteres))
 
+    #desordenar la cadena
     random.shuffle(contraseña)
 
     return "".join(contraseña)
@@ -65,12 +66,13 @@ def medidorSeguridad(contraseña):
     else:
         return "muy segura"
 
+#se devuelve longitud, error
 def validar_longitud(raw_len):
     raw_len = (raw_len or "").strip()
     try:
         longitud = int(raw_len)
     except ValueError:
-        return None, "La longitud debe ser un número."
+        return None, "La longitud debe ser un número entero."
 
     if longitud < MIN_LEN or longitud > MAX_LEN:
         return None, f"La longitud debe estar entre {MIN_LEN} y {MAX_LEN}."

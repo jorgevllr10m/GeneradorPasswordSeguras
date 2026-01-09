@@ -8,5 +8,6 @@ def create_app():
 
 app = create_app()
 
+#solo si ejecuto en local
 if __name__ == "__main__":
     app.run()

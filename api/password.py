@@ -7,6 +7,7 @@ from services.ServicePassword import (
     medidorSeguridad
 )
 
+#Blueprint es el archivo que contiene rutas
 web = Blueprint("web", __name__)
 
 @web.get("/")
