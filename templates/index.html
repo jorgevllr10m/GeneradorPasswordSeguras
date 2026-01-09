@@ -8,10 +8,10 @@
 <body>
     <h1>Generador de Contraseñas</h1>
 
-    <form method="POST">
+    <form method="POST" action="/generar">
 
         Longitud:
-        <input type="number" name="longitud" min="4" max="32" value="10" required>
+        <input type="number" name="longitud" min="{{ min_len }}" max="{{ max_len }}" value="10" required>
         <br><br>
 
         <label><input type="checkbox" name="digito" checked> Incluir mínimo un dígito</label><br>
@@ -21,6 +21,12 @@
 
         <button type="submit">Generar</button>
     </form>
+
+    {% if error %}
+        <div style="margin-top: 15px; color: #b00020; font-weight: bold;">
+            {{ error }}
+        </div>
+    {% endif %}
 
     {% if contraseña %}
         <div style="

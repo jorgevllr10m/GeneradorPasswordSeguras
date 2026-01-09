@@ -1,6 +1,13 @@
 import random
 import string
 
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
+
+MIN_LEN = 4
+MAX_LEN = 32
+
 def generaContraseña(l, requerirDigito, requerirMayuscula, requerirMinuscula, requerirSimbolo):
     
     requeridos = sum([requerirDigito, requerirMayuscula, requerirMinuscula, requerirSimbolo])
@@ -61,28 +68,37 @@ def medidorSeguridad(contraseña):
         return "segura"
     else:
         return "muy segura"
-    
 
-from flask import Flask, render_template, request
+@app.get("/")
+def home():
+    # Página inicial
+    return render_template("index.html", contraseña=None, fuerza=None, error=None, min_len=MIN_LEN, max_len=MAX_LEN)
 
-app = Flask(__name__)
-
-@app.route("/", methods=["GET", "POST"])
-def index():
+@app.post("/generar")
+def generar():
     contraseña = None
     fuerza = None
+    error = None
+    
+    longitud = int(request.form["longitud"])
+    requerirDigito = "digito" in request.form
+    requerirMayuscula = "mayus" in request.form
+    requerirMinuscula = "minus" in request.form
+    requerirSimbolo = "simbolo" in request.form
 
-    if request.method == "POST":
-        longitud = int(request.form["longitud"])
-        requerirDigito = "digito" in request.form
-        requerirMayuscula = "mayus" in request.form
-        requerirMinuscula = "minus" in request.form
-        requerirSimbolo = "simbolo" in request.form
+    #Validación en el servidor 
+    if longitud is None:
+        error = "La longitud debe ser un número."
+    elif longitud < MIN_LEN or longitud > MAX_LEN:
+        error = f"La longitud debe estar entre {MIN_LEN} y {MAX_LEN}."
+    else:
+        try:
+            contraseña = generaContraseña(longitud, requerirDigito, requerirMayuscula, requerirMinuscula, requerirSimbolo)
+            fuerza = medidorSeguridad(contraseña)
+        except ValueError as e:
+            error = str(e)
 
-        contraseña = generaContraseña(longitud, requerirDigito, requerirMayuscula, requerirMinuscula, requerirSimbolo)
-        fuerza = medidorSeguridad(contraseña)
-
-    return render_template("index.html", contraseña=contraseña, fuerza=fuerza)
+    return render_template("index.html", contraseña=contraseña, fuerza=fuerza, error=error, min_len=MIN_LEN, max_len=MAX_LEN)
 
 if __name__ == "__main__":
     app.run()
